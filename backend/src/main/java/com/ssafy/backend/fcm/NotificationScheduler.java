@@ -45,7 +45,7 @@ public class NotificationScheduler {
     @PostConstruct
     public void firebaseSetting() throws IOException {
         //내 firebase 콘솔에서 가져온 비공개 키 파일을 통해 백엔드에서 파이어베이스에 접속함
-        GoogleCredentials googleCredentials = GoogleCredentials.fromStream(new ClassPathResource("firebase/blooming-18b74-firebase-adminsdk-i9dwm-372e530990.json").getInputStream())
+        GoogleCredentials googleCredentials = GoogleCredentials.fromStream(new ClassPathResource("firebase/blooming-dc332-firebase-adminsdk-qwsik-17b94f2342.json").getInputStream())
                 .createScoped((Arrays.asList(fireBaseCreateScoped)));
         FirebaseOptions secondaryAppConfig = FirebaseOptions.builder()
                 .setCredentials(googleCredentials)
@@ -55,7 +55,7 @@ public class NotificationScheduler {
     }
 
     //시간에 맞게 푸시 알림을 스케줄링하는 코드
-    @Scheduled(cron = "* * 10 * * ?")
+    @Scheduled(cron = "5 * * * * ?")
     public void pushMorningDietAlarm() {
         log.info("매 시 매 초 알림");
 
@@ -96,50 +96,59 @@ findByScheduleAt(30일 후)
         //일단은 쿼리로 짜보자
 
         //근데 이건 다 돼야 할 수 있을듯. 커플이랑 이런거
-        System.out.println("30일 후");
-        List<Schedule> schedules = scheduleRepository.findAllByScheduleDate(LocalDate.now().plusDays(30));
-        for (Schedule s : schedules){
-            System.out.println(s);
-
-            Long targetId = 1L;
-            String subject = "30일 후 일정이 있습니다";
-            String content = "일정 내용은 머시기";
-
-
-            //토큰, 일정 이름(Title), 상세 내용(body)을 보냄
-            String result = sendNotificationByToken(new FCMNotificationRequestDto(targetId, subject, content)); // 첫 번째로 넣은 유저
-            log.info(result);
-        }
-
-        System.out.println("10일 후");
-        schedules = scheduleRepository.findAllByScheduleDate(LocalDate.now().plusDays(10));
-        for (Schedule s : schedules){
-            System.out.println(s);
-
-            Long targetId = 1L;
-            String subject = "10일 후 일정이 있습니다";
-            String content = "일정 내용은 머시기";
-
-
-            //토큰, 일정 이름(Title), 상세 내용(body)을 보냄
-            String result = sendNotificationByToken(new FCMNotificationRequestDto(targetId, subject, content)); // 첫 번째로 넣은 유저
-            log.info(result);
-        }
+//        System.out.println("30일 후");
+//        List<Schedule> schedules = scheduleRepository.findAllByScheduleDate(LocalDate.now().plusDays(30));
+//        for (Schedule s : schedules){
+//            System.out.println(s);
+//
+//            Long targetId = 1L;
+//            String subject = "30일 후 일정이 있습니다";
+//            String content = "일정 내용은 머시기";
+//
+//
+//            //토큰, 일정 이름(Title), 상세 내용(body)을 보냄
+//            String result = sendNotificationByToken(new FCMNotificationRequestDto(targetId, subject, content)); // 첫 번째로 넣은 유저
+//            log.info(result);
+//        }
+//
+//        System.out.println("10일 후");
+//        schedules = scheduleRepository.findAllByScheduleDate(LocalDate.now().plusDays(10));
+//        for (Schedule s : schedules){
+//            System.out.println(s);
+//
+//            Long targetId = 1L;
+//            String subject = "10일 후 일정이 있습니다";
+//            String content = "일정 내용은 머시기";
+//
+//
+//            //토큰, 일정 이름(Title), 상세 내용(body)을 보냄
+//            String result = sendNotificationByToken(new FCMNotificationRequestDto(targetId, subject, content)); // 첫 번째로 넣은 유저
+//            log.info(result);
+//        }
 
         System.out.println("오늘");
-        schedules = scheduleRepository.findAllByScheduleDate(LocalDate.now().plusDays(0));
-        for (Schedule s : schedules){
-            System.out.println(s);
-
-            Long targetId = 1L;
-            String subject = "오늘 일정이 있습니다";
-            String content = "일정 내용은 머시기";
+        Long targetId = 1L;
+        String subject = "오늘 일정이 있습니다";
+        String content = "일정 내용은 머시기";
 
 
-            //토큰, 일정 이름(Title), 상세 내용(body)을 보냄
-            String result = sendNotificationByToken(new FCMNotificationRequestDto(targetId, subject, content)); // 첫 번째로 넣은 유저
-            log.info(result);
-        }
+        //토큰, 일정 이름(Title), 상세 내용(body)을 보냄
+        String result = sendNotificationByToken(new FCMNotificationRequestDto(targetId, subject, content)); // 첫 번째로 넣은 유저
+        log.info(result);
+//
+//        List<Schedule> schedules = scheduleRepository.findAllByScheduleDate(LocalDate.now().plusDays(0));
+//        for (Schedule s : schedules){
+//            System.out.println(s);
+//            System.out.println("오나 여기");
+//            Long targetId = 1L;
+//            String subject = "오늘 일정이 있습니다";
+//            String content = "일정 내용은 머시기";
+//
+//
+//            //토큰, 일정 이름(Title), 상세 내용(body)을 보냄
+//            String result = sendNotificationByToken(new FCMNotificationRequestDto(targetId, subject, content)); // 첫 번째로 넣은 유저
+//            log.info(result);
+//        }
 
 
     }
@@ -150,8 +159,8 @@ findByScheduleAt(30일 후)
     private String sendNotificationByToken(FCMNotificationRequestDto fcmDto) {
         Optional<User> user = userRepository.findById(fcmDto.getTargetUserId());
 
-        if (user.isPresent()) {
-            String token = "eKbKoD7ETfqRiIKFF_4Zom:APA91bHbzIq11sl8_qbv1yE7-RFqjXnywPVo5u13FMC9kqIjJTrHkXIfqWODhBYvTS3EOGlOLQzlXUvJNwXn4EFbgoAC_WZzylV9yo5KOGLj96agM68p8qPc8bCPODgRk9aP_TNeKiLn";
+        if (true) {
+            String token = "dnbMWTmiSfa-SgqQrRTH83:APA91bGlKLPWHjNCpKr_v7cKEovITSxjTI-iFA7vpx2u4wodDRekSR3MeFjhr4uxwW06b3ipgxjAE7RuXmQ2lvXUlF0w1vUNimr4gmJEf4mFihVqR1c8devfBhz1w-yK0ufmymXK6D8F";
 //            token = user.get().getFirebaseToken();
             if (token != null) {
                 Notification notification = Notification.builder()

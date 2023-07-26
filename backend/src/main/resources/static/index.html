@@ -9,5 +9,38 @@
 </head>
 <body>
 <a href="/oauth2/authorization/kakao">Kakao Login</a><br>
+
+<br>
+<button id="mybtn">
+  fcm내놔
+</button>
+
+<br>
+<input type="text" id="fcminput">
+<script>
+  document.getElementById("mybtn").onclick=function (){
+    window.flutter_inappwebview.callHandler('handleFoo')
+            .then(function(result) {
+              // print to the console the data coming
+              // from the Flutter side.
+              console.log(JSON.stringify(result));
+              fcmtext = document.getElementById("fcminput");
+              fcmtext.value = JSON.stringify(result);
+            });
+  }
+
+  // window.addEventListener("flutterInAppWebViewPlatformReady", function(event) {
+  //   window.flutter_inappwebview.callHandler('handlerFoo')
+  //           .then(function(result) {
+  //             // print to the console the data coming
+  //             // from the Flutter side.
+  //             console.log(JSON.stringify(result));
+  //             fcmtext = document.getElementById("fcminput");
+  //             fcmtext.value = JSON.stringify(result);
+  //             window.flutter_inappwebview
+  //                     .callHandler('handlerFooWithArgs', 1, true, ['bar', 5], {foo: 'baz'}, result);
+  //           });
+  // });
+</script>
 </body>
 </html>
