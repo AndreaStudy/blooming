@@ -160,7 +160,7 @@ findByScheduleAt(30일 후)
         Optional<User> user = userRepository.findById(fcmDto.getTargetUserId());
 
         if (true) {
-            String token = "dnbMWTmiSfa-SgqQrRTH83:APA91bGlKLPWHjNCpKr_v7cKEovITSxjTI-iFA7vpx2u4wodDRekSR3MeFjhr4uxwW06b3ipgxjAE7RuXmQ2lvXUlF0w1vUNimr4gmJEf4mFihVqR1c8devfBhz1w-yK0ufmymXK6D8F";
+            String token = "fON3JJhWSe60fLWxlG7KKi:APA91bHBQkMeTecztoi85rTs7xEmk5GCVtjQ6RBOIGyJkUTXAPxGt14FpbcdV_hPd9G8OeNugog3TGl5SL1vHixH4I4Ax8OuV1znXu8Afcg7D8jolEQ47lOyhoZT6rY2RY8Rf7ONg3Lb";
 //            token = user.get().getFirebaseToken();
             if (token != null) {
                 Notification notification = Notification.builder()
