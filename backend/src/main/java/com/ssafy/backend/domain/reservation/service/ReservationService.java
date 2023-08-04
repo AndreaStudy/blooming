@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -35,20 +36,16 @@ public class ReservationService {
     @Transactional
     public void registerReservation(ReservationRegistDto reservationRegistDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || authentication.getName() == null) {
-            throw new RuntimeException("Security Context에 인증 정보가 없습니다.");
-        }
-        String userEmail = authentication.getName();
+        User user = userRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new IllegalArgumentException("JWT token: 회원 이메일에 해당하는 회원이 없습니다."));
 
-        // 유저, 상품 객체 찾기
-        User findUser = userRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new IllegalArgumentException("이메일에 해당하는 유저가 없습니다."));
+        // 상품 객체 찾기
         Product product = productRepository.findById(reservationRegistDto.getProduct_id())
                 .orElseThrow(() -> new IllegalArgumentException("아이디에 해당하는 상품이 없습니다."));
 
         //예약 객체 생성
         Reservation reservation = new Reservation(reservationRegistDto.getReservedDate(), reservationRegistDto.getReservedTime());
-        reservation.setUser(findUser);
+        reservation.setUser(user);
         reservation.setProduct(product);
 
         //객체 저장
@@ -79,27 +76,20 @@ public class ReservationService {
     }
 
     public List<ReservationResultDto> getUserReservation() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || authentication.getName() == null) {
-            throw new RuntimeException("Security Context에 인증 정보가 없습니다.");
-        }
-
         //객체 찾기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User findUser = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new IllegalArgumentException("이메일에 해당하는 유저가 없습니다."));
 
         List<Reservation> reservations = findUser.getReservations();
-        List<ReservationResultDto> reservationResultDtos = new ArrayList<>();
-        for (Reservation reservation : reservations){
-            ReservationResultDto reservationResultDto = new ReservationResultDto(
-                    reservation.getId(),
-                    reservation.getReservedDate(),
-                    reservation.getReservedTime(),
-                    reservation.getProduct().getId()
-            );
-            reservationResultDtos.add(reservationResultDto);
-        }
-        return reservationResultDtos;
+        return reservations.stream()
+                .map(reservation -> new ReservationResultDto(
+                        reservation.getId(),
+                        reservation.getReservedDate(),
+                        reservation.getReservedTime(),
+                        reservation.getProduct().getId()
+                ))
+                .collect(Collectors.toList());
     }
 
     public void deleteReservation(Long reservationId) {
