@@ -88,9 +88,12 @@ public class NotificationScheduler {
             for (Schedule schedule : schedules) {
                 System.out.println(schedule);
 
-
                 //1. 푸시 알림 보내기
                 Long targetId = 1L; //나중에 알림 커플 유저 두 명에게 각각 보내느 걸로 수정
+                ////a. 본인한테 보내기 Test OK
+
+                ////b.
+
                 String title = schedule.getTitle();
                 String content = schedule.getContent();
                 log.info(title + content);
