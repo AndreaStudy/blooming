@@ -54,8 +54,8 @@ public class InvitationController {
         else{
             //이미 만든 청첩장 존재
             basicResponse = BasicResponse.builder()
-                    .code(HttpStatus.NO_CONTENT.value())
-                    .httpStatus(HttpStatus.NO_CONTENT)
+                    .code(HttpStatus.CONFLICT.value())
+                    .httpStatus(HttpStatus.CONFLICT)
                     .message("이미 만든 청첩장 존재").build();
         }
 
@@ -72,32 +72,10 @@ public class InvitationController {
             basicResponse = BasicResponse.builder()
                     .code(HttpStatus.NO_CONTENT.value())
                     .httpStatus(HttpStatus.NO_CONTENT)
-                    .message("내 청첩장 조회 실패")
+                    .message("현재 만든 청첩장 없음")
                     .count(0).build();
         } else {
-            InvitationResultDto invitationResultDto = new InvitationResultDto(
-                    invitation.getId(),
-                    invitation.getThumbnail(),
-                    invitation.getGroomFatherName(),
-                    invitation.getGroomFatherPhone(),
-                    invitation.getGroomMotherName(),
-                    invitation.getGroomMotherPhone(),
-                    invitation.getBrideFatherName(),
-                    invitation.getBrideFatherPhone(),
-                    invitation.getBrideMotherName(),
-                    invitation.getBrideMotherPhone(),
-                    invitation.getTitle(),
-                    invitation.getContent(),
-                    invitation.getWeddingHallName(),
-                    invitation.getFloor(),
-                    invitation.getAddress(),
-                    invitation.getDate(),
-                    invitation.getTime(),
-                    invitation.getGroomName(),
-                    invitation.getGroomPhone(),
-                    invitation.getBrideName(),
-                    invitation.getBridePhone()
-            );
+            InvitationResultDto invitationResultDto = new InvitationResultDto(invitation);
 
             basicResponse = BasicResponse.builder()
                     .code(HttpStatus.OK.value())
