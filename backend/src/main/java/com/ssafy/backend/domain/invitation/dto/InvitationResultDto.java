@@ -1,5 +1,6 @@
 package com.ssafy.backend.domain.invitation.dto;
 
+import com.ssafy.backend.domain.invitation.Invitation;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -45,4 +46,29 @@ public class InvitationResultDto {
     private String groomPhone;
     private String brideName;
     private String bridePhone;
+
+    public InvitationResultDto(Invitation invitation) {
+        this.id = invitation.getId();
+        this.thumbnail = invitation.getThumbnail();
+        this.groomFatherName = invitation.getGroomFatherName();
+        this.groomFatherPhone = invitation.getGroomFatherPhone();
+        this.groomMotherName = invitation.getGroomMotherName();
+        this.groomMotherPhone = invitation.getGroomMotherPhone();
+        this.brideFatherName = invitation.getBrideFatherName();
+        this.brideFatherPhone = invitation.getBrideFatherPhone();
+        this.brideMotherName = invitation.getBrideMotherName();
+        this.brideMotherPhone = invitation.getBrideMotherPhone();
+        this.title = invitation.getTitle();
+        this.content = invitation.getContent();
+        this.weddingHallName = invitation.getWeddingHallName();
+        this.floor = invitation.getFloor();
+        this.address = invitation.getAddress();
+        this.date = invitation.getDate();
+        this.time = invitation.getTime();
+        this.groomName = invitation.getGroomName();
+        this.groomPhone = invitation.getGroomPhone();
+        this.brideName = invitation.getBrideName();
+        this.bridePhone = invitation.getBridePhone();
+    }
+
 }
